@@ -15,25 +15,25 @@ There are 6 Components:
 1. Git Pull for three Repositories : FraudDetection,CreditcardProducer,Fraud-alert-dashboard
 
 2. Before starting Jobs we need to have Cassandra in place, here are the steps:
-- docker pull datastax/dse-server:5.1.5 (Pull Casssandra Image)
-- docker pull datastax/dse-studio:latest (Pull Cassandra Studio Image (Web GUI) )
-- docker run -p 9042:9042 -e DS_LICENSE=accept --memory 4g --name my-dse -d datastax/dse-server:5.1.5 (Run Cassandra container)
-- docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name my-studio -d datastax/dse-studio
+ - docker pull datastax/dse-server:5.1.5 (Pull Casssandra Image)
+ - docker pull datastax/dse-studio:latest (Pull Cassandra Studio Image (Web GUI) )
+ - docker run -p 9042:9042 -e DS_LICENSE=accept --memory 4g --name my-dse -d datastax/dse-server:5.1.5 (Run Cassandra container)
+ - docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name my-studio -d datastax/dse-studio
  (Run Cassandra Studio)
--  Connect to Cassandra Studio: http://localhost:9091/  > Go to Tab "Working with CQL 6.0.0" > Test Connection change host name to my-dse and Test & Save. 
-- In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in FraudDetection folder).
-- 4 Tables are created : customer, fraud_transaction, non_fraud_transaction, kafka_offset
+ -  Connect to Cassandra Studio: http://localhost:9091/  > Go to Tab "Working with CQL 6.0.0" > Test Connection change host name to my-dse and Test & Save. 
+ - In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in FraudDetection folder).
+ - 4 Tables are created : customer, fraud_transaction, non_fraud_transaction, kafka_offset
 
  3. Move to   Project > Fraud-alert-dashboard :
-   a. Run Fraud-alert-dashboard/src/main/java/com/datamantra/fraudalertdashboard/dashboard/FraudAlertDashboard.java
-   b  Open localhost:8080 (You'll see dashboard without data since we have not pushed data in Cassandra - we will do it next)
+   - Run Fraud-alert-dashboard/src/main/java/com/datamantra/fraudalertdashboard/dashboard/FraudAlertDashboard.java
+   -  Open localhost:8080 (You'll see dashboard without data since we have not pushed data in Cassandra - we will do it next)
 
  4. Now move to Project > FraudDetection and run the requiered jobs as explained below:
-  a. Job1: FraudDetection/src/main/scala/com/datamantra/spark/jobs/IntialImportToCassandra.scala (Load data in customer, fraud_transaction, non_fraud_transaction tables)
-  b. Job2: FraudDetection/src/main/scala/com/datamantra/spark/jobs/FraudDetectionTraining.scala (Create 2 Models PreprocessingModel & RandomForestModel @ FraudDetection/src/main/resources/spark/training using Spark ML)
-  c. Job3 : To run DstreamFraudDetection.scala > first we will setup Kafka and then run the Job:
-     i.  git clone https://github.com/wurstmeister/kafka-docker
-	 ii. Replace the code in kafka-docker > docker-compose.yml with:
+  - Job1: FraudDetection/src/main/scala/com/datamantra/spark/jobs/IntialImportToCassandra.scala (Load data in customer, fraud_transaction, non_fraud_transaction tables)
+  - Job2: FraudDetection/src/main/scala/com/datamantra/spark/jobs/FraudDetectionTraining.scala (Create 2 Models PreprocessingModel & RandomForestModel @ FraudDetection/src/main/resources/spark/training using Spark ML)
+  - Job3 : To run DstreamFraudDetection.scala > first we will setup Kafka and then run the Job:
+     -  git clone https://github.com/wurstmeister/kafka-docker
+     - Replace the code in kafka-docker > docker-compose.yml with:
 	 
 	   ```
 		    version: '2'
@@ -53,12 +53,12 @@ There are 6 Components:
 				volumes:
 				  - /var/run/docker.sock:/var/run/docker.sock
 		
-iii.  Go to folder kafka-docker and run docker-compose up -d  (This will run Zookeeper, Kafka @ 9092  with the topic "creditTransaction" alreday created)
-iv. Now run the Streaming Job which will listen to Kafka Topic : FraudDetection/src/main/scala/com/datamantra/spark/jobs/RealTimeFraudDetection/DstreamFraudDetection.scala
-	  v. Note: This will not get any messages yet since the Kafaka Topic is empty.Next we will populate the topic with data.
+     - Go to folder kafka-docker and run docker-compose up -d  (This will run Zookeeper, Kafka @ 9092  with the topic "creditTransaction" alreday created)
+     - Now run the Streaming Job which will listen to Kafka Topic : FraudDetection/src/main/scala/com/datamantra/spark/jobs/RealTimeFraudDetection/DstreamFraudDetection.scala 
+     - Note: This will not get any messages yet since the Kafaka Topic is empty.Next we will populate the topic with data.
 	  
  5. Move to Project > CreditcardProducer
-    a. Run with Configurtaion: CreditcardProducer/src/main/scala/com/datamantra/producer/TrasactionProducer.scala : src/main/resources/application-local.conf (in Program Arguments)
+    - Run with Configurtaion: CreditcardProducer/src/main/scala/com/datamantra/producer/TrasactionProducer.scala : src/main/resources/application-local.conf (in Program Arguments)
 	
  6 This above step starts pushing transaction data into kafaka from where the DstreamFraudDetection Job will start consuming messages and work with generated Models and push data back to Cassandra after predictions.
  
