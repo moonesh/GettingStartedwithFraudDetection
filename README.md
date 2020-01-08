@@ -15,14 +15,14 @@ There are 6 Components:
 1. Git Pull for three Repositories : FraudDetection,CreditcardProducer,Fraud-alert-dashboard
 
 2. Before starting Jobs we need to have Cassandra in place, here are the steps:
-a. docker pull datastax/dse-server:5.1.5 (Pull Casssandra Image)
-b. docker pull datastax/dse-studio:latest (Pull Cassandra Studio Image (Web GUI) )
-c. docker run -p 9042:9042 -e DS_LICENSE=accept --memory 4g --name my-dse -d datastax/dse-server:5.1.5 (Run Cassandra container)
-d. docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name my-studio -d datastax/dse-studio
+- docker pull datastax/dse-server:5.1.5 (Pull Casssandra Image)
+- docker pull datastax/dse-studio:latest (Pull Cassandra Studio Image (Web GUI) )
+- docker run -p 9042:9042 -e DS_LICENSE=accept --memory 4g --name my-dse -d datastax/dse-server:5.1.5 (Run Cassandra container)
+- docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name my-studio -d datastax/dse-studio
  (Run Cassandra Studio)
-   e.  Connect to Cassandra Studio: http://localhost:9091/  > Go to Tab "Working with CQL 6.0.0" > Test Connection change host name to my-dse and Test & Save. 
-   f.  In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in FraudDetection folder).
-   g.  4 Tables are created : customer, fraud_transaction, non_fraud_transaction, kafka_offset
+-  Connect to Cassandra Studio: http://localhost:9091/  > Go to Tab "Working with CQL 6.0.0" > Test Connection change host name to my-dse and Test & Save. 
+- In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in FraudDetection folder).
+- 4 Tables are created : customer, fraud_transaction, non_fraud_transaction, kafka_offset
 
  3. Move to   Project > Fraud-alert-dashboard :
    a. Run Fraud-alert-dashboard/src/main/java/com/datamantra/fraudalertdashboard/dashboard/FraudAlertDashboard.java
