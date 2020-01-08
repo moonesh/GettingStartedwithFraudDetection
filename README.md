@@ -51,10 +51,14 @@ d. docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name
 				  KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 				volumes:
 				  - /var/run/docker.sock:/var/run/docker.sock
-		 
-		 ```
-      iii.  Go to folder kafka-docker and run docker-compose up -d  (This will run Zookeeper, Kafka @ 9092  with the topic "creditTransaction" alreday created)
-	  iv. Now run the Streaming Job which will listen to Kafka Topic : FraudDetection/src/main/scala/com/datamantra/spark/jobs/RealTimeFraudDetection/DstreamFraudDetection.scala
+		
+		```
+		
+		
+ 
+		
+iii.  Go to folder kafka-docker and run docker-compose up -d  (This will run Zookeeper, Kafka @ 9092  with the topic "creditTransaction" alreday created)
+iv. Now run the Streaming Job which will listen to Kafka Topic : FraudDetection/src/main/scala/com/datamantra/spark/jobs/RealTimeFraudDetection/DstreamFraudDetection.scala
 	  v. Note: This will not get any messages yet since the Kafaka Topic is empty.Next we will populate the topic with data.
 	  
  5. Move to Project > CreditcardProducer
