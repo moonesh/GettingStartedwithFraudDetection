@@ -32,8 +32,9 @@ d. docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name
   b. Job2: FraudDetection/src/main/scala/com/datamantra/spark/jobs/FraudDetectionTraining.scala (Create 2 Models PreprocessingModel & RandomForestModel @ FraudDetection/src/main/resources/spark/training using Spark ML)
   c. Job3 : To run DstreamFraudDetection.scala > first we will setup Kafka and then run the Job:
      i.  git clone https://github.com/wurstmeister/kafka-docker
-	 ii. Replace the code in kafka-docker > docker-compose.yml with :
-	     ```
+	 ii. Replace the code in kafka-docker > docker-compose.yml with:
+	 
+	   ```
 		    version: '2'
 			services:
 			  zookeeper:
