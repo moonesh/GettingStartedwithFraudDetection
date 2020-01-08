@@ -90,7 +90,7 @@ There are 6 Components:
   a. First Run Spark Job 
  
  
-![High-level Architectural Diagram](SupportingDocuments/FraudDetectionArchitecture.png)
+![High-level Architectural Diagram](images/FraudDetectionArchitecture.png)
 
 # What does the ApP DO? 
 
@@ -109,8 +109,8 @@ There are 6 Components:
  
  
  # ML FLOW
-![High-level Architectural Diagram](SupportingDocuments/Spark-ML-Job.png)
-![High-level Architectural Diagram](SupportingDocuments/Spark-ML-Job-(AlgorithmExplaination).png)
+![High-level Architectural Diagram](images/Spark-ML-Job.png)
+![High-level Architectural Diagram](images/Spark-ML-Job-(AlgorithmExplaination).png)
  
   StrinIndexer - 1st Stage of Pipeline 
   This will transform all the selected columns into Double Values because the ML Algo will not understand String Values but Only Doubble Values
@@ -142,7 +142,7 @@ There are 6 Components:
   
   
 # Runtime Streaming
-![High-level Architectural Diagram](SupportingDocuments/spark-streaming-job.png)
+![High-level Architectural Diagram](images/spark-streaming-job.png)
    
   This is SPark Streaming Job and a Consumer of Kafka Topic genertaed by the Simulator. We devide it in 2 parts
  
