@@ -14,10 +14,10 @@ There are 6 Components:
 # SETUP
 1. Git Pull for three Repositories : FraudDetection,CreditcardProducer,Fraud-alert-dashboard
 2. Before starting Jobs we need to have Cassandra in place, here are the steps:
-   a.  docker pull datastax/dse-server:5.1.5 (Pull Casssandra Image)
-   b.  docker pull datastax/dse-studio:latest (Pull Cassandra Studio Image (Web GUI) ) 
-   c.  docker run -p 9042:9042 -e DS_LICENSE=accept --memory 4g --name my-dse -d datastax/dse-server:5.1.5 (Run Cassandra container)
-   d.  docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name my-studio -d datastax/dse-studio
+a.  docker pull datastax/dse-server:5.1.5 (Pull Casssandra Image)
+b.  docker pull datastax/dse-studio:latest (Pull Cassandra Studio Image (Web GUI) ) 
+c.  docker run -p 9042:9042 -e DS_LICENSE=accept --memory 4g --name my-dse -d datastax/dse-server:5.1.5 (Run Cassandra container)
+d.  docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name my-studio -d datastax/dse-studio
  (Run Cassandra Studio)
    e.  Connect to Cassandra Studio: http://localhost:9091/  > Go to Tab "Working with CQL 6.0.0" > Test Connection change host name to my-dse and Test & Save. 
    f.  In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in FraudDetection folder).
