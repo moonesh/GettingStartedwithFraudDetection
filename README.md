@@ -11,6 +11,7 @@ There are 6 Components:
 6. Zookeeper & Kafka Message Broker  
 
 
+
 # SETUP
 1. Git Pull for three Repositories : FraudDetection,CreditcardProducer,Fraud-alert-dashboard
 
@@ -23,13 +24,14 @@ There are 6 Components:
  -  Connect to Cassandra Studio: http://localhost:9091/  > Go to Tab "Working with CQL 6.0.0" > Test Connection change host name to my-dse and Test & Save. 
  - In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in FraudDetection folder).
  - 4 Tables are created : customer, fraud_transaction, non_fraud_transaction, kafka_offset
+ 
+ ## Please Note:  In order to run the Jobs in Windows "WINUTILS.EXE" is requiered.Actually, Hadoop/Spark requires native libraries on Windows to work properly -that includes accessing the file:// filesystem, where Hadoop uses some Windows APIs to implement posix-like file access permissions.  
+*You need to download and place the WINUTILS.EXE file inside a "bin" directory and the "bin" should be placed under the folder mentioned in set property below. (i.e C:\\data\\CreditCardFraud\\bin) . Alternatively you can also set Enviornment Variable for Hadoop_Home.
+ 
+ - System.Property("hadoop.home.dir", "C:\\data\\CreditCardFraud");  
 
-  ##Please Note:  In order to run the Jobs in Windows "WINUTILS.EXE" is requiered.Actually, Hadoop/Spark requires native libraries on Windows to work properly -that includes accessing the file:// filesystem, where Hadoop uses some Windows APIs to implement posix-like file access permissions.  
-  So in the jobs you'll find  the bwlow line. You need to sownload and place the WINUTILS.EXE file inside a "bin" directory and the "bin" should be placed under the folder mentioned in set property. (i.e C:\\data\\CreditCardFraud\\bin) . Alternatively you can also set Enviornment Variable for Hadoop_Home.   
-  
-  ```
-  System.setProperty("hadoop.home.dir", "C:\\data\\CreditCardFraud");
-  
+ 
+ 
  3. Move to   Project > Fraud-alert-dashboard :
    - Run Fraud-alert-dashboard/src/main/java/com/datamantra/fraudalertdashboard/dashboard/FraudAlertDashboard.java
    -  Open localhost:8080 (You'll see dashboard without data since we have not pushed data in Cassandra - we will do it next)
