@@ -40,28 +40,15 @@ There are 6 Components:
   - Job1: FraudDetection/src/main/scala/com/datamantra/spark/jobs/IntialImportToCassandra.scala (Load data in customer, fraud_transaction, non_fraud_transaction tables)
   - Job2: FraudDetection/src/main/scala/com/datamantra/spark/jobs/FraudDetectionTraining.scala (Create 2 Models PreprocessingModel & RandomForestModel @ FraudDetection/src/main/resources/spark/training using Spark ML)
   - Job3 : To run DstreamFraudDetection.scala > first we will setup Kafka and then run the Job:
-     -  git clone https://github.com/wurstmeister/kafka-docker
-     - Replace the code in kafka-docker > docker-compose.yml with:
-	 
+     - Run following command using "docker-compose-kafka-ecosystem.yml" contained in the current folder. It will run zookeper, kafka server and kafka ui 
+	   
 	   ```
-		    version: '2'
-			services:
-			  zookeeper:
-				image: wurstmeister/zookeeper
-				ports:
-				  - "2181:2181"
-			  kafka:
-				build: .
-				ports:
-				  - "9092:9092"
-				environment:
-				  KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-				  KAFKA_CREATE_TOPICS: "creditcardTransaction"
-				  KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-				volumes:
-				  - /var/run/docker.sock:/var/run/docker.sock
-		
-     - Go to folder kafka-docker and run docker-compose up -d  (This will run Zookeeper, Kafka @ 9092  with the topic "creditTransaction" alreday created)
+	   docker-compose -f docker-compose-kafka-ecosystem.yml up -d	
+     - To monitor topics and  messages in kafka open up ] the Kafka UI @ localhost:9000. Note it will create a topic automatically because of the propert mentioned in yml file as 
+    ```
+     KAFKA_CREATE_TOPICS: "creditcardTransaction"  
+     
+     ```
      - Now run the Streaming Job which will listen to Kafka Topic : FraudDetection/src/main/scala/com/datamantra/spark/jobs/RealTimeFraudDetection/DstreamFraudDetection.scala 
      - Note: This will not get any messages yet since the Kafaka Topic is empty.Next we will populate the topic with data.
 	  
