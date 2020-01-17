@@ -22,7 +22,7 @@ There are 6 Components:
  - docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name my-studio -d datastax/dse-studio
  (Run Cassandra Studio)
  -  Connect to Cassandra Studio: http://localhost:9091/  > Go to Tab "Working with CQL 6.0.0" > Test Connection change host name to my-dse and Test & Save. 
- - In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in FraudDetection folder).
+ - In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in this repository).
  - 4 Tables are created : customer, fraud_transaction, non_fraud_transaction, kafka_offset
  
  ## Please Note:  In order to run the Jobs in Windows "WINUTILS.EXE" is requiered.Actually, Hadoop/Spark requires native libraries on Windows to work properly -that includes accessing the file:// filesystem, where Hadoop uses some Windows APIs to implement posix-like file access permissions.  
