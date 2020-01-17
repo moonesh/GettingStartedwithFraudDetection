@@ -44,11 +44,8 @@ There are 6 Components:
 	   
 	   ```
 	   docker-compose -f docker-compose-kafka-ecosystem.yml up -d	
-     - To monitor topics and  messages in kafka open up ] the Kafka UI @ localhost:9000. Note it will create a topic automatically because of the propert mentioned in yml file as 
-    ```
-     KAFKA_CREATE_TOPICS: "creditcardTransaction"  
-     
-     ```
+     - To monitor topics and  messages in kafka open up ] the Kafka UI @ localhost:9000. Note a topic is automatically created whenever an app willl try to listen or push the payload on a particular topic  i.e creditcardTransaction (in our case)
+    
      - Now run the Streaming Job which will listen to Kafka Topic : FraudDetection/src/main/scala/com/datamantra/spark/jobs/RealTimeFraudDetection/DstreamFraudDetection.scala 
      - Note: This will not get any messages yet since the Kafaka Topic is empty.Next we will populate the topic with data.
 	  
