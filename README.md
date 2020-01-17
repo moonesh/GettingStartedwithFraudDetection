@@ -11,6 +11,7 @@ There are 6 Components:
 6. Zookeeper & Kafka Message Broker  
 
 
+
 # SETUP
 1. Git Pull for three Repositories : FraudDetection,CreditcardProducer,Fraud-alert-dashboard
 
@@ -21,15 +22,16 @@ There are 6 Components:
  - docker run -e DS_LICENSE=accept --link my-dse -p 9091:9091 --memory 1g --name my-studio -d datastax/dse-studio
  (Run Cassandra Studio)
  -  Connect to Cassandra Studio: http://localhost:9091/  > Go to Tab "Working with CQL 6.0.0" > Test Connection change host name to my-dse and Test & Save. 
- - In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in FraudDetection folder).
+ - In Studio : Create Key Space and Tables using : creditcard.sql (FraudDetection/src/main/resources/cassandra/creditcard.cql). Alternatively import Notebook  FraudDetection_Notebook.tar (present in this repository).
  - 4 Tables are created : customer, fraud_transaction, non_fraud_transaction, kafka_offset
+ 
+ ## Please Note:  In order to run the Jobs in Windows "WINUTILS.EXE" is requiered.Actually, Hadoop/Spark requires native libraries on Windows to work properly -that includes accessing the file:// filesystem, where Hadoop uses some Windows APIs to implement posix-like file access permissions.  
+*You need to download and place the WINUTILS.EXE file inside a "bin" directory and the "bin" should be placed under the folder mentioned in set property below. (i.e C:\\data\\CreditCardFraud\\bin) . Alternatively you can also set Enviornment Variable for Hadoop_Home.
+ 
+ - System.Property("hadoop.home.dir", "C:\\data\\CreditCardFraud");  
 
-  ##Please Note:  In order to run the Jobs in Windows "WINUTILS.EXE" is requiered.Actually, Hadoop/Spark requires native libraries on Windows to work properly -that includes accessing the file:// filesystem, where Hadoop uses some Windows APIs to implement posix-like file access permissions.  
-  So in the jobs you'll find  the bwlow line. You need to sownload and place the WINUTILS.EXE file inside a "bin" directory and the "bin" should be placed under the folder mentioned in set property. (i.e C:\\data\\CreditCardFraud\\bin) . Alternatively you can also set Enviornment Variable for Hadoop_Home.   
-  
-  ```
-  System.setProperty("hadoop.home.dir", "C:\\data\\CreditCardFraud");
-  
+ 
+ 
  3. Move to   Project > Fraud-alert-dashboard :
    - Run Fraud-alert-dashboard/src/main/java/com/datamantra/fraudalertdashboard/dashboard/FraudAlertDashboard.java
    -  Open localhost:8080 (You'll see dashboard without data since we have not pushed data in Cassandra - we will do it next)
@@ -38,28 +40,15 @@ There are 6 Components:
   - Job1: FraudDetection/src/main/scala/com/datamantra/spark/jobs/IntialImportToCassandra.scala (Load data in customer, fraud_transaction, non_fraud_transaction tables)
   - Job2: FraudDetection/src/main/scala/com/datamantra/spark/jobs/FraudDetectionTraining.scala (Create 2 Models PreprocessingModel & RandomForestModel @ FraudDetection/src/main/resources/spark/training using Spark ML)
   - Job3 : To run DstreamFraudDetection.scala > first we will setup Kafka and then run the Job:
-     -  git clone https://github.com/wurstmeister/kafka-docker
-     - Replace the code in kafka-docker > docker-compose.yml with:
-	 
+     - Run following command using "docker-compose-kafka-ecosystem.yml" contained in the current folder. It will run zookeper, kafka server and kafka ui 
+	   
 	   ```
-		    version: '2'
-			services:
-			  zookeeper:
-				image: wurstmeister/zookeeper
-				ports:
-				  - "2181:2181"
-			  kafka:
-				build: .
-				ports:
-				  - "9092:9092"
-				environment:
-				  KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-				  KAFKA_CREATE_TOPICS: "creditcardTransaction"
-				  KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-				volumes:
-				  - /var/run/docker.sock:/var/run/docker.sock
-		
-     - Go to folder kafka-docker and run docker-compose up -d  (This will run Zookeeper, Kafka @ 9092  with the topic "creditTransaction" alreday created)
+	   docker-compose -f docker-compose-kafka-ecosystem.yml up -d	
+     - To monitor topics and  messages in kafka open up ] the Kafka UI @ localhost:9000. Note it will create a topic automatically because of the propert mentioned in yml file as 
+    ```
+     KAFKA_CREATE_TOPICS: "creditcardTransaction"  
+     
+     ```
      - Now run the Streaming Job which will listen to Kafka Topic : FraudDetection/src/main/scala/com/datamantra/spark/jobs/RealTimeFraudDetection/DstreamFraudDetection.scala 
      - Note: This will not get any messages yet since the Kafaka Topic is empty.Next we will populate the topic with data.
 	  
